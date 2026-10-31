@@ -1,0 +1,40 @@
+; =============================================================================
+; Fluconazole population PK model - Monolix (Mlxtran) structural model
+; One-compartment, first-order elimination, IV infusion
+; CKD-EPI (time-varying regressor) and cirrhosis on CL; TBW on V
+;
+; Companion model code for:
+;   Bendjilali-Sabiani et al. "Impact of liver cirrhosis on fluconazole
+;   pharmacokinetics in critically ill patients: model-informed precision
+;   dosing through a validated R-Shiny application." CMPB, 2026.
+;
+; Final parameter estimates are reported in Table 2 of the manuscript:
+;   CL_pop = 0.70 L/h, V_pop = 63.74 L,
+;   beta_CKD = 0.88, beta_cirrhosis = -0.44, beta_TBW = 1.66,
+;   omega_CL = 0.23, omega_V = 0.30, b (proportional error) = 0.12.
+;   Reference CKD-EPI = 73.7 mL/min, reference TBW = 70.5 kg.
+; =============================================================================
+
+[LONGITUDINAL]
+input = {CL_pop, V_pop, beta_CKD, beta_cirr, beta_TBW, CKD, TBW, CIRR}
+
+CKD  = {use = regressor}          ; CKD-EPI, time-varying regressor (LOCF)
+TBW  = {use = covariate}          ; total body weight (kg)
+CIRR = {use = covariate}          ; cirrhosis (0/1)
+
+EQUATION:
+; typical covariate-adjusted parameters
+CL = CL_pop * (CKD/73.7)^beta_CKD * exp(beta_cirr*CIRR)
+V  = V_pop  * (TBW/70.5)^beta_TBW
+
+; one-compartment IV, first-order elimination
+k  = CL/V
+ddt_Ac = -k*Ac
+Cc = Ac/V
+
+OUTPUT:
+output = Cc
+
+; Statistical model (set in the Monolix project):
+;   CL, V : log-normal IIV (omega_CL = 0.23, omega_V = 0.30), no correlation
+;   residual error : proportional, b = 0.12

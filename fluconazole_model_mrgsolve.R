@@ -37,7 +37,7 @@ ETA_CL : 0.0529 : IIV on CL (variance; omega_CL = 0.23)
 ETA_V  : 0.00   0.09 : IIV on V (variance; omega_V = 0.30)
 
 $SIGMA @annotated
-PROP : 0.016129 : Proportional residual error (variance; b = 0.127)
+PROP : 0.016129 : Proportional residual error (variance; b = 0.12)
 
 $MAIN
 double CL = TVCL * pow(CKD/CKDref, BETA_CKD) * exp(BETA_CIRRH*CIRRH) * exp(ETA_CL);

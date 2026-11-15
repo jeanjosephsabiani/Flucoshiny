@@ -21,21 +21,22 @@ One-compartment model with first-order elimination and IV (30-min) infusion.
 
 ```
 CL = 0.70 · (CKD-EPI / 73.7)^0.88 · exp(-0.44 · cirrhosis)      [L/h]
-V  = 63.74 · (TBW / 70.5)^1.66                                   [L]
+V  = 63.74 · (TBW / 73.75)^1.66                                   [L]
 ```
 
 Between-subject variability (log-normal): omega_CL = 0.23, omega_V = 0.30
-(no CL–V correlation). Residual error: proportional, b = 0.12.
-CKD-EPI is a time-varying regressor (last value carried forward). Full
+(no CL–V correlation). Residual error: proportional, b = 0.127.
+CKD-EPI is a time-varying regressor. Full
 parameter estimates with uncertainty are in Table 2 of the manuscript.
 
 ## Files
 
 | File | Purpose |
 |------|---------|
-| `fluconazole_model_monolix.txt` | Mlxtran structural model (parameter estimation) |
+| `fluconazole_model_monolix.txt` | Mlxtran structural model |
+| `fluconazole_model_monolix_project.mlxtran` | Monolix project: covariate model, variability, error model, final parameters (data not provided) |
 | `fluconazole_model_mrgsolve.R`  | mrgsolve model (a priori Monte-Carlo simulations) |
-| `fluconazole_model_saemix.R`    | saemix structural model + a posteriori MAP setup |
+| `fluconazole_model_saemix.R`    | saemix structural model + a posteriori MAP estimation (`estimate_MAP()`) |
 
 ## Requirements
 

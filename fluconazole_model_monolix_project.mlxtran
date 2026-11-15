@@ -1,0 +1,67 @@
+<DATAFILE>
+
+[FILEINFO]
+file = 'data.csv'
+delimiter = comma
+header = {ID, TIME, AMT, TINF, DV, CKD, WT, CIRRH}
+
+[CONTENT]
+ID = {use=identifier}
+TIME = {use=time}
+AMT = {use=amount}
+TINF = {use=infusiontime}
+DV = {use=observation, type=continuous}
+CKD = {use=regressor}
+WT = {use=covariate, type=continuous}
+CIRRH = {use=covariate, type=categorical}
+
+[SETTINGS]
+regressorType = linearInterpolation
+
+<MODEL>
+
+[COVARIATE]
+input = {WT, CIRRH}
+
+CIRRH = {type=categorical, categories={'0', '1'}}
+
+EQUATION:
+logtBW = log(WT/73.75)
+
+[INDIVIDUAL]
+input = {Cl_pop, omega_Cl, V_pop, omega_V, betaCKD_pop, CIRRH, beta_Cl_CIRRH_1, logtBW, beta_V_logtBW}
+
+CIRRH = {type=categorical, categories={'0', '1'}}
+
+DEFINITION:
+Cl = {distribution=logNormal, typical=Cl_pop, covariate=CIRRH, coefficient={0, beta_Cl_CIRRH_1}, sd=omega_Cl}
+V = {distribution=logNormal, typical=V_pop, covariate=logtBW, coefficient=beta_V_logtBW, sd=omega_V}
+betaCKD = {distribution=normal, typical=betaCKD_pop, no-variability}
+
+[LONGITUDINAL]
+input = {b}
+
+file = 'fluconazole_model_monolix.txt'
+
+DEFINITION:
+DV = {distribution=normal, prediction=Cc, errorModel=proportional(b)}
+
+<FIT>
+data = 'DV'
+model = DV
+
+<PARAMETER>
+Cl_pop = {value=0.70, method=FIXED}
+V_pop = {value=63.74, method=FIXED}
+b = {value=0.127, method=FIXED}
+betaCKD_pop = {value=0.88, method=FIXED}
+beta_Cl_CIRRH_1 = {value=-0.44, method=FIXED}
+beta_V_logtBW = {value=1.66, method=FIXED}
+omega_Cl = {value=0.23, method=FIXED}
+omega_V = {value=0.30, method=FIXED}
+
+<MONOLIX>
+
+[TASKS]
+populationParameters()
+individualParameters(method = {conditionalMode})

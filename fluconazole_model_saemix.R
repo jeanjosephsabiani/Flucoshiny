@@ -27,7 +27,7 @@ CKDref   <- 73.7    # mL/min/1.73 m2
 TBWref   <- 73.75   # kg
 omega_CL <- 0.23
 omega_V  <- 0.30
-b_prop   <- 0.127   # proportional residual error
+b_prop   <- 0.12   # proportional residual error
 
 # ---- Structural model --------------------------------------------------------
 # psi   : one row per subject, columns (CL, V) at the reference covariates

@@ -53,7 +53,7 @@ model = DV
 <PARAMETER>
 Cl_pop = {value=0.70, method=FIXED}
 V_pop = {value=63.74, method=FIXED}
-b = {value=0.127, method=FIXED}
+b = {value=0.12, method=FIXED}
 betaCKD_pop = {value=0.88, method=FIXED}
 beta_Cl_CIRRH_1 = {value=-0.44, method=FIXED}
 beta_V_logtBW = {value=1.66, method=FIXED}
